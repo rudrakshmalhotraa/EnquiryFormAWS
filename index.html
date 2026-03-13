@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — Enquiry Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0a0f;
+      --surface:  #12121a;
+      --border:   #1e1e2e;
+      --accent:   #6c63ff;
+      --accent2:  #ff6584;
+      --text:     #e8e8f0;
+      --muted:    #6b6b80;
+      --success:  #43e97b;
+      --error:    #ff6584;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background orbs */
+    body::before {
+      content: '';
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 70%);
+      top: -200px; left: -200px;
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,101,132,0.08) 0%, transparent 70%);
+      bottom: -100px; right: -100px;
+      pointer-events: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 560px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .header { margin-bottom: 2.5rem; }
+    .header .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(108,99,255,0.35);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+    .header h1 span { color: var(--accent); }
+    .header p {
+      margin-top: 0.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(108,99,255,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+
+    .field { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    input, textarea, select {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+    }
+    textarea { resize: vertical; min-height: 110px; }
+    select option { background: var(--surface); }
+
+    .btn {
+      width: 100%;
+      margin-top: 1.25rem;
+      padding: 0.9rem 2rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(108,99,255,0.4); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1.1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      animation: fadeUp 0.3s ease;
+    }
+    .toast.success { background: rgba(67,233,123,0.12); border: 1px solid rgba(67,233,123,0.25); color: var(--success); display: flex; }
+    .toast.error   { background: rgba(255,101,132,0.12); border: 1px solid rgba(255,101,132,0.25); color: var(--error);   display: flex; }
+
+    .admin-link {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .admin-link a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .admin-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <span class="tag">Get in Touch</span>
+    <h1>Send us an<br/><span>Enquiry</span></h1>
+    <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+  </div>
+
+  <div class="card">
+    <form id="enquiryForm">
+      <div class="row">
+        <div class="field">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" placeholder="John Doe" required />
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="+91 98765 43210" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" placeholder="john@example.com" required />
+      </div>
+
+      <div class="field">
+        <label for="subject">Subject</label>
+        <select id="subject">
+          <option value="">Select a subject...</option>
+          <option value="General Enquiry">General Enquiry</option>
+          <option value="Product Demo">Product Demo</option>
+          <option value="Pricing">Pricing</option>
+          <option value="Support">Support</option>
+          <option value="Partnership">Partnership</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="message">Message *</label>
+        <textarea id="message" placeholder="Tell us what's on your mind..." required></textarea>
+      </div>
+
+      <button class="btn" type="submit" id="submitBtn">
+        <span id="btnText">Submit Enquiry</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+
+      <div class="toast" id="toast"></div>
+    </form>
+  </div>
+
+  <div class="admin-link">
+    View all submissions → <a href="admin.html">Admin Panel</a>
+  </div>
+</div>
+
+<script>
+  // ⚠️  REPLACE THIS with your actual API Gateway endpoint after deployment
+  const SUBMIT_API_URL = 'https://rduhszo81m.execute-api.us-east-1.amazonaws.com/prod/enquiry';
+
+  const form     = document.getElementById('enquiryForm');
+  const btn      = document.getElementById('submitBtn');
+  const btnText  = document.getElementById('btnText');
+  const spinner  = document.getElementById('spinner');
+  const toast    = document.getElementById('toast');
+
+  function showToast(msg, type) {
+    toast.className = `toast ${type}`;
+    toast.textContent = (type === 'success' ? '✓  ' : '✕  ') + msg;
+    setTimeout(() => { toast.className = 'toast'; }, 5000);
+  }
+
+  function setLoading(on) {
+    btn.disabled = on;
+    btnText.style.display = on ? 'none' : 'block';
+    spinner.style.display = on ? 'block' : 'none';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const payload = {
+      name:    document.getElementById('name').value,
+      email:   document.getElementById('email').value,
+      phone:   document.getElementById('phone').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value,
+    };
+
+    try {
+      const res  = await fetch(SUBMIT_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        showToast('Enquiry submitted successfully! We\'ll be in touch.', 'success');
+        form.reset();
+      } else {
+        showToast(data.error || 'Submission failed. Please try again.', 'error');
+      }
+    } catch (err) {
+      showToast('Network error. Check your API URL.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  });
+</script>
+</body>
+</html>
